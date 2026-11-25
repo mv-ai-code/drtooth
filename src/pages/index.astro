@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import drVainer from '../assets/dr-vainer.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ServicesGrid from '../components/ServicesGrid.astro';
@@ -30,7 +32,18 @@ const schema = [organizationSchema(), ...offices.map(officeSchema)];
   </section>
 
   <section id="about" class="py-16 sm:py-24">
-    <div class="container-page grid gap-12 lg:grid-cols-2 lg:gap-20">
+    <div class="container-page grid items-center gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
+        <div class="absolute -top-4 -left-4 h-32 w-32 rounded-3xl bg-orange-soft" aria-hidden="true"></div>
+        <div class="absolute -right-4 -bottom-4 h-40 w-40 rounded-3xl bg-navy-soft" aria-hidden="true"></div>
+        <Image
+          src={drVainer}
+          alt="Dr. Victoria Vainer, DMD"
+          widths={[384, 576, 768, 1024]}
+          sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, calc(100vw - 2rem)"
+          class="relative aspect-[4/5] w-full rounded-3xl object-cover object-top shadow-[var(--shadow-card)]"
+        />
+      </div>
       <div>
         <p class="eyebrow">About us</p>
         <h2 class="mt-2 text-4xl text-navy-dark sm:text-5xl">Meet Dr. Victoria Vainer</h2>
@@ -45,20 +58,22 @@ const schema = [organizationSchema(), ...offices.map(officeSchema)];
             welcoming environment. {site.tagline}
           </p>
         </div>
+        <ul class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          {
+            highlights.map((h) => (
+              <li class="flex gap-4">
+                <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-navy-soft text-navy">
+                  <Icon name={h.icon} class="size-5" />
+                </div>
+                <div>
+                  <h3 class="font-sans text-base font-semibold tracking-normal">{h.title}</h3>
+                  <p class="mt-1 text-[0.95rem] text-ink-muted">{h.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
       </div>
-      <ul class="grid content-center gap-4 sm:grid-cols-2">
-        {
-          highlights.map((h) => (
-            <li class="card p-6">
-              <div class="flex size-11 items-center justify-center rounded-xl bg-navy-soft text-navy">
-                <Icon name={h.icon} class="size-5" />
-              </div>
-              <h3 class="mt-4 font-sans text-base font-semibold tracking-normal">{h.title}</h3>
-              <p class="mt-1 text-[0.95rem] text-ink-muted">{h.text}</p>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
