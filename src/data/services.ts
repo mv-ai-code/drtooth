@@ -108,11 +108,11 @@ export const services: Service[] = [
     video: {
       title: 'Same-day crowns with CEREC',
       description:
-        'A 46-second narrated animation showing how a CEREC same-day crown is made in one visit, from tooth preparation and digital scan to design, milling and bonding.',
+        'A 47-second narrated animation showing how a CEREC same-day crown is made in one visit, from tooth preparation and digital scan to design, milling and bonding.',
       src720: '/videos/cerec-crown-720p.mp4',
       src1080: '/videos/cerec-crown-1080p.mp4',
       poster: '/videos/cerec-crown-poster.jpg',
-      duration: 'PT46S',
+      duration: 'PT47S',
       uploadDate: '2026-11-25',
       // Matches the narration.
       transcript: [
