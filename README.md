@@ -99,7 +99,8 @@ Marked `VERIFY` in the code.
   - "Board-certified dentists" (plural): now "Advanced training in implant and cosmetic dentistry".
   - "Evening and weekend appointments": now "Ask about appointment times that fit your schedule".
   - "Pain-free procedures": now "Modern techniques focused on comfort".
-- CEREC and CBCT: available at both offices?
+- CBCT: available at both offices? (CEREC is Bellevue only, noted on its card.)
+- CEREC video says "one visit of about two hours": confirm with Dr. Vainer (it's in the narration and captions, not the site text).
 - Botox and lip filler: within scope of practice in WA, and offered at both offices?
 - Amalgam fillings: still offered? (The site now says tooth-colored fillings.)
 - Cleanings and exams aren't in the services list; should they be?

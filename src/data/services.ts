@@ -102,9 +102,29 @@ export const services: Service[] = [
   },
   {
     title: 'Same-Day Crowns (CEREC)',
-    description: 'A custom permanent crown in a single visit with CEREC CAD/CAM technology.', // VERIFY: which offices
+    description: 'A custom permanent crown in a single visit with CEREC CAD/CAM technology. Available at our Bellevue office.',
     icon: 'cerec',
     group: 'technology',
+    video: {
+      title: 'Same-day crowns with CEREC',
+      description:
+        'A 46-second narrated animation showing how a CEREC same-day crown is made in one visit, from tooth preparation and digital scan to design, milling and bonding.',
+      src720: '/videos/cerec-crown-720p.mp4',
+      src1080: '/videos/cerec-crown-1080p.mp4',
+      poster: '/videos/cerec-crown-poster.jpg',
+      duration: 'PT46S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'Same-day crowns with CEREC.',
+        'Step one: preparing the tooth. The damaged tooth is gently shaped to receive a crown, all in a single visit.',
+        'Step two: the digital scan. A small camera scans the prepared tooth and its neighbors. No messy impressions.',
+        'Step three: the design. Your crown is designed on the computer, to fit your bite precisely.',
+        'Step four: milling. An in-office milling unit carves your crown from a solid ceramic block.',
+        'Step five: your new crown. The permanent crown is bonded in place, all in one visit of about two hours.',
+        'Same-day crowns are available at our Bellevue office. Book a consultation with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'CBCT 3D Imaging',
