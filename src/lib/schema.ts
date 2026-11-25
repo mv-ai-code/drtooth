@@ -1,5 +1,6 @@
 /** schema.org JSON-LD for search engines (Dentist / LocalBusiness). */
 import { site, offices, weekdays, type Office, type Weekday } from '../data/site';
+import { services } from '../data/services';
 
 const dayNames: Record<Weekday, string> = {
   Mon: 'Monday',
@@ -55,4 +56,25 @@ export function organizationSchema() {
     founder: { '@type': 'Person', name: site.dentist },
     subOrganization: offices.map((o) => ({ '@id': `${site.url}${o.path}#dentist` })),
   };
+}
+
+/** VideoObject for every service video; add to pages that render ServicesGrid. */
+export function videoSchemas() {
+  return services.flatMap(({ video: v }) =>
+    v
+      ? [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'VideoObject',
+            name: v.title,
+            description: v.description,
+            thumbnailUrl: `${site.url}${v.poster}`,
+            contentUrl: `${site.url}${v.src720}`,
+            uploadDate: v.uploadDate,
+            duration: v.duration,
+            transcript: v.transcript.join(' '),
+          },
+        ]
+      : [],
+  );
 }

@@ -32,6 +32,19 @@ hours: {
 },
 ```
 
+### Procedure videos
+
+A service with a `video` gets a "Watch how it works" button and a pop-up player on the home page and both
+office pages, plus search-engine data (VideoObject). To add one:
+
+1. Put three files in [public/videos/](public/videos/): a 720p MP4, a 1080p MP4 (H.264 + AAC, with
+   `-movflags +faststart` so playback starts before the download finishes) and a poster JPG under ~200 KB.
+2. Add a `video` entry to that service in [src/data/services.ts](src/data/services.ts), copying the
+   Dental Implants one: `title`, one-sentence `description`, the three paths, `duration` (e.g. `'PT46S'`),
+   `uploadDate` and the approved `transcript` lines.
+
+No other code changes are needed. Nothing is downloaded until a visitor opens the video.
+
 ## Running locally
 
 Needs **Node 22.23 or newer** (Node 24 LTS recommended).

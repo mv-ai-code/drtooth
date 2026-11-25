@@ -27,6 +27,11 @@
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+  /* Keep the page behind an open pop-up (e.g. the video player) from scrolling. */
+  html:has(dialog[open]) {
+    overflow: hidden;
   }
   body {
     background: var(--color-cream);

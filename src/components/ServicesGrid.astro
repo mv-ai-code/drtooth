@@ -1,26 +1,56 @@
 ---
 import ServiceIcon from './ServiceIcon.astro';
-import { services } from '../data/services';
+import Icon from './Icon.astro';
+import VideoDialog from './VideoDialog.astro';
+import { services, serviceSlug } from '../data/services';
 
 interface Props {
   headingLevel?: 'h2' | 'h3';
 }
 const { headingLevel = 'h3' } = Astro.props;
 const H = headingLevel;
+
+const videoId = (s: (typeof services)[number]) => `video-${serviceSlug(s)}`;
 ---
 
 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {
-    services.map((s) => (
-      <li class="flex gap-4 rounded-2xl border border-line bg-white p-5">
-        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-soft text-orange-strong">
-          <ServiceIcon name={s.icon} />
-        </div>
-        <div>
-          <H class="font-sans text-base font-semibold tracking-normal text-navy-dark">{s.title}</H>
-          <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-muted">{s.description}</p>
-        </div>
-      </li>
-    ))
+    services.map((s) =>
+      s.video ? (
+        // The button's ::after covers the whole card, so the card is one big click target.
+        <li class="group relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition-colors outline-orange outline-offset-2 hover:border-orange has-[:focus-visible]:outline-3">
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-soft text-orange-strong">
+            <ServiceIcon name={s.icon} />
+          </div>
+          <div>
+            <H class="font-sans text-base font-semibold tracking-normal text-navy-dark">{s.title}</H>
+            <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-muted">{s.description}</p>
+            <button
+              type="button"
+              class="mt-2 inline-flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-orange-strong group-hover:underline after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none"
+              aria-haspopup="dialog"
+              aria-controls={videoId(s)}
+              data-video-open={videoId(s)}
+            >
+              <Icon name="play" class="size-5" />
+              Watch how it works
+              <span class="sr-only"> (video: {s.video.title})</span>
+            </button>
+          </div>
+        </li>
+      ) : (
+        <li class="flex gap-4 rounded-2xl border border-line bg-white p-5">
+          <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-soft text-orange-strong">
+            <ServiceIcon name={s.icon} />
+          </div>
+          <div>
+            <H class="font-sans text-base font-semibold tracking-normal text-navy-dark">{s.title}</H>
+            <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-muted">{s.description}</p>
+          </div>
+        </li>
+      ),
+    )
   }
 </ul>
+
+{services.map((s) => s.video && <VideoDialog id={videoId(s)} video={s.video} />)}

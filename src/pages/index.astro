@@ -8,9 +8,9 @@ import OfficeCard from '../components/OfficeCard.astro';
 import AppointmentForm from '../components/AppointmentForm.astro';
 import Icon from '../components/Icon.astro';
 import { site, offices, highlights, tel } from '../data/site';
-import { organizationSchema, officeSchema } from '../lib/schema';
+import { organizationSchema, officeSchema, videoSchemas } from '../lib/schema';
 
-const schema = [organizationSchema(), ...offices.map(officeSchema)];
+const schema = [organizationSchema(), ...offices.map(officeSchema), ...videoSchemas()];
 ---
 
 <BaseLayout fullTitle={`${site.name} | Bellevue & Mountlake Terrace, WA`} schema={schema}>

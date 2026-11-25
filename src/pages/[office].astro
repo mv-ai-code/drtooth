@@ -7,7 +7,7 @@ import ServicesGrid from '../components/ServicesGrid.astro';
 import AppointmentForm from '../components/AppointmentForm.astro';
 import Icon from '../components/Icon.astro';
 import { site, offices, tel, type Office } from '../data/site';
-import { officeSchema } from '../lib/schema';
+import { officeSchema, videoSchemas } from '../lib/schema';
 
 export const getStaticPaths = (() =>
   offices.map((office) => ({ params: { office: office.id }, props: { office } }))) satisfies GetStaticPaths;
@@ -18,7 +18,7 @@ const title = `Dentist in ${office.city}, WA`;
 const description = `${site.name} in ${office.city}, WA: family, implant and cosmetic dentistry with ${site.dentist}. ${office.street}. Call ${office.phone}.`;
 ---
 
-<BaseLayout title={title} description={description} schema={[officeSchema(office)]}>
+<BaseLayout title={title} description={description} schema={[officeSchema(office), ...videoSchemas()]}>
   <section class="py-12 sm:py-16">
     <div class="container-page grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-16">
       <div>

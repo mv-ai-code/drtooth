@@ -1,0 +1,136 @@
+---
+/**
+ * Pop-up player for a procedure video (native <dialog>). Nothing is downloaded until it opens:
+ * the poster and source are set from data attributes by the script below.
+ * Opened by any button with data-video-open="<dialog id>" (see ServicesGrid).
+ */
+import Icon from './Icon.astro';
+import type { ServiceVideo } from '../data/services';
+
+interface Props {
+  id: string;
+  video: ServiceVideo;
+}
+const { id, video } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<dialog
+  id={id}
+  class="video-dialog m-auto max-h-[calc(100dvh-1.5rem)] w-[min(60rem,calc(100vw-1.5rem))] max-w-none overflow-y-auto overscroll-contain rounded-3xl [scrollbar-width:thin] bg-white p-0 text-navy-dark shadow-[var(--shadow-card)] backdrop:bg-navy-dark/75"
+  aria-labelledby={titleId}
+  data-video-dialog
+  data-src720={video.src720}
+  data-src1080={video.src1080}
+  data-poster={video.poster}
+>
+  <div class="flex items-center justify-between gap-4 py-2.5 pr-2.5 pl-5 sm:pl-6">
+    <h2 id={titleId} class="text-2xl leading-tight sm:text-3xl">{video.title}</h2>
+    <button
+      type="button"
+      class="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full text-navy-dark transition-colors hover:bg-navy-soft"
+      aria-label="Close video"
+      data-video-close
+    >
+      <Icon name="close" class="size-6" />
+    </button>
+  </div>
+
+  <div class="aspect-video bg-navy-dark">
+    <video class="block size-full" controls playsinline preload="none" aria-labelledby={titleId}>
+      Your browser can't play this video. The transcript is below.
+    </video>
+  </div>
+
+  <div class="space-y-4 p-5 sm:p-6">
+    <details class="group">
+      <summary class="cursor-pointer font-semibold text-navy hover:underline">Read the transcript</summary>
+      <ul class="mt-3 space-y-2 leading-relaxed text-ink-muted">
+        {video.transcript.map((line) => <li>{line}</li>)}
+      </ul>
+    </details>
+    <p class="text-sm text-ink-muted">Illustrations are simplified for education. Your treatment plan may differ.</p>
+    <a href="#appointment" class="btn btn-primary" data-video-book>Request an appointment</a>
+  </div>
+</dialog>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .video-dialog[open] {
+      animation: video-dialog-in 0.2s ease-out;
+    }
+    .video-dialog[open]::backdrop {
+      animation: video-backdrop-in 0.2s ease-out;
+    }
+  }
+  @keyframes video-dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem) scale(0.98);
+    }
+  }
+  @keyframes video-backdrop-in {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  const large = window.matchMedia('(min-width: 1280px)');
+
+  for (const dialog of document.querySelectorAll<HTMLDialogElement>('dialog[data-video-dialog]')) {
+    const video = dialog.querySelector('video')!;
+    const closeBtn = dialog.querySelector<HTMLButtonElement>('[data-video-close]')!;
+    let opener: HTMLElement | null = null;
+    let returnFocus = true;
+
+    const open = (trigger: HTMLElement) => {
+      opener = trigger;
+      returnFocus = true;
+      const { poster, src720, src1080 } = dialog.dataset;
+      video.poster = poster ?? '';
+      video.src = (large.matches ? src1080 : src720) ?? '';
+      dialog.showModal();
+      closeBtn.focus();
+      video.play().catch(() => {
+        /* Autoplay refused (e.g. power saving): the visitor can press play. */
+      });
+    };
+
+    for (const btn of document.querySelectorAll<HTMLElement>(`[data-video-open="${dialog.id}"]`)) {
+      btn.addEventListener('click', () => open(btn));
+    }
+
+    closeBtn.addEventListener('click', () => dialog.close());
+
+    // Backdrop click: the dialog itself is the target only outside its content box.
+    dialog.addEventListener('click', (e) => {
+      if (e.target !== dialog) return;
+      const r = dialog.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!inside) dialog.close();
+    });
+
+    // Esc is handled natively by <dialog>; every way of closing ends here.
+    dialog.addEventListener('close', () => {
+      video.pause();
+      video.currentTime = 0;
+      video.removeAttribute('src');
+      video.load(); // stops any download in progress
+      if (returnFocus) opener?.focus();
+    });
+
+    // "Request an appointment": close, then go to this page's form instead of back to the card.
+    dialog.querySelector<HTMLAnchorElement>('[data-video-book]')?.addEventListener('click', (e) => {
+      const target = document.getElementById('appointment');
+      if (!target) return; // let the link navigate normally
+      e.preventDefault();
+      returnFocus = false;
+      dialog.close();
+      history.pushState(null, '', '#appointment');
+      target.scrollIntoView({ block: 'start' });
+      target.querySelector<HTMLInputElement>('input[name="firstName"]')?.focus({ preventScroll: true });
+    });
+  }
+</script>
