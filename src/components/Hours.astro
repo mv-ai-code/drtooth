@@ -1,0 +1,56 @@
+---
+import { tel, weekdays, type OfficeHours } from '../data/site';
+
+interface Props {
+  hours: OfficeHours | null;
+  phone: string;
+}
+const { hours, phone } = Astro.props;
+
+/** "09:00" → "9 am", "16:30" → "4:30 pm" */
+const fmt = (t: string) => {
+  const [h, m] = t.split(':').map(Number);
+  const suffix = h >= 12 ? 'pm' : 'am';
+  const h12 = h % 12 || 12;
+  return m ? `${h12}:${String(m).padStart(2, '0')} ${suffix}` : `${h12} ${suffix}`;
+};
+
+// Group consecutive days with the same hours: "Tue – Wed  9 am – 6 pm".
+const rows: { days: string; label: string; closed: boolean }[] = [];
+if (hours) {
+  let start = 0;
+  for (let i = 1; i <= weekdays.length; i++) {
+    const same = i < weekdays.length && JSON.stringify(hours[weekdays[i]]) === JSON.stringify(hours[weekdays[start]]);
+    if (same) continue;
+    const span = hours[weekdays[start]];
+    rows.push({
+      days: i - 1 === start ? weekdays[start] : `${weekdays[start]} – ${weekdays[i - 1]}`,
+      label: span ? `${fmt(span[0])} – ${fmt(span[1])}` : 'Closed',
+      closed: !span,
+    });
+    start = i;
+  }
+}
+---
+
+{
+  hours ? (
+    <table class="w-full max-w-xs text-left text-[0.95rem]">
+      <caption class="sr-only">Office hours</caption>
+      <tbody>
+        {rows.map((r) => (
+          <tr class="border-b border-line/70 last:border-0">
+            <th scope="row" class="py-1 pr-4 font-medium whitespace-nowrap">
+              {r.days}
+            </th>
+            <td class:list={['py-1 tabular-nums', r.closed && 'text-ink-muted']}>{r.label}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p>
+      Please <a href={tel(phone)} class="font-semibold text-navy hover:underline">call the office</a> for current hours.
+    </p>
+  )
+}

@@ -1,0 +1,26 @@
+---
+import ServiceIcon from './ServiceIcon.astro';
+import { services } from '../data/services';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+const { headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    services.map((s) => (
+      <li class="flex gap-4 rounded-2xl border border-line bg-white p-5">
+        <div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-orange-soft text-orange-strong">
+          <ServiceIcon name={s.icon} />
+        </div>
+        <div>
+          <H class="font-sans text-base font-semibold tracking-normal text-navy-dark">{s.title}</H>
+          <p class="mt-1 text-[0.95rem] leading-relaxed text-ink-muted">{s.description}</p>
+        </div>
+      </li>
+    ))
+  }
+</ul>

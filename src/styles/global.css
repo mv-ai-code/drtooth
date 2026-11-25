@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+
+/* Brand tokens. Logo orange + navy on a warm off-white. */
+@theme {
+  --color-cream: hsl(40 33% 98%);
+  --color-sand: hsl(40 30% 94%);
+  --color-line: hsl(40 18% 86%);
+
+  --color-navy: hsl(215 70% 42%); /* primary: links, buttons */
+  --color-navy-dark: hsl(215 55% 22%); /* headings, body text, footer */
+  --color-navy-soft: hsl(215 60% 95%);
+
+  --color-orange: hsl(25 95% 53%); /* logo orange: decoration and large type only */
+  --color-orange-strong: hsl(22 90% 40%); /* AA-contrast orange for text and buttons with white text */
+  --color-orange-soft: hsl(28 100% 94%);
+
+  --color-ink-muted: hsl(215 20% 38%);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+
+  --shadow-card: 0 10px 30px -12px hsl(215 50% 23% / 0.18);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-cream);
+    color: var(--color-navy-dark);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  h1,
+  h2,
+  h3,
+  dd {
+    /* Cormorant defaults to old-style numerals ("15+" looks lowercase). */
+    font-variant-numeric: lining-nums;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-orange-strong);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.975rem;
+    line-height: 1.2;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      box-shadow 0.15s,
+      transform 0.15s;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-primary {
+    background: var(--color-orange-strong);
+    color: white;
+    box-shadow: 0 6px 16px -6px hsl(22 90% 40% / 0.55);
+  }
+  .btn-primary:hover {
+    background: hsl(22 90% 34%);
+  }
+  .btn-secondary {
+    background: white;
+    color: var(--color-navy-dark);
+    box-shadow: inset 0 0 0 1.5px var(--color-line);
+  }
+  .btn-secondary:hover {
+    box-shadow: inset 0 0 0 1.5px var(--color-navy);
+    color: var(--color-navy);
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+  .field {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1.5px solid var(--color-line);
+    background: var(--color-cream);
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    color: var(--color-navy-dark);
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 3px hsl(215 70% 42% / 0.18);
+  }
+  .field:user-invalid {
+    border-color: hsl(0 70% 45%);
+  }
+  .label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .sr-only-focusable:not(:focus) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}

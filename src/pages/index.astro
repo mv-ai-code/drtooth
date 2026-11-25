@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import OfficeCard from '../components/OfficeCard.astro';
+import AppointmentForm from '../components/AppointmentForm.astro';
+import Icon from '../components/Icon.astro';
+import { site, offices, highlights, tel } from '../data/site';
+import { organizationSchema, officeSchema } from '../lib/schema';
+
+const schema = [organizationSchema(), ...offices.map(officeSchema)];
+---
+
+<BaseLayout fullTitle={`${site.name} | Bellevue & Mountlake Terrace, WA`} schema={schema}>
+  <Hero />
+
+  <section id="services" class="border-y border-line bg-sand/60 py-16 sm:py-24">
+    <div class="container-page">
+      <div class="max-w-2xl">
+        <p class="eyebrow">What we do</p>
+        <h2 class="mt-2 text-4xl text-navy-dark sm:text-5xl">Our dental services</h2>
+        <p class="mt-4 text-lg text-ink-muted">
+          Comprehensive care tailored to your needs, from fillings and crowns to implants and aesthetic treatments.
+        </p>
+      </div>
+      <div class="mt-10">
+        <ServicesGrid />
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-16 sm:py-24">
+    <div class="container-page grid gap-12 lg:grid-cols-2 lg:gap-20">
+      <div>
+        <p class="eyebrow">About us</p>
+        <h2 class="mt-2 text-4xl text-navy-dark sm:text-5xl">Meet Dr. Victoria Vainer</h2>
+        <div class="mt-6 space-y-4 text-lg leading-relaxed text-ink-muted">
+          <p>
+            Dr. Victoria Vainer, DMD, leads Dr. Tooth Family and Implant Dentistry with a commitment to excellence and
+            patient-centered care. With advanced training in implant dentistry and cosmetic procedures, Dr. Vainer provides
+            comprehensive care at two convenient locations.
+          </p>
+          <p>
+            From routine care to dental implants and aesthetic treatments, we provide comprehensive care in a comfortable,
+            welcoming environment. {site.tagline}
+          </p>
+        </div>
+      </div>
+      <ul class="grid content-center gap-4 sm:grid-cols-2">
+        {
+          highlights.map((h) => (
+            <li class="card p-6">
+              <div class="flex size-11 items-center justify-center rounded-xl bg-navy-soft text-navy">
+                <Icon name={h.icon} class="size-5" />
+              </div>
+              <h3 class="mt-4 font-sans text-base font-semibold tracking-normal">{h.title}</h3>
+              <p class="mt-1 text-[0.95rem] text-ink-muted">{h.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section id="locations" class="border-y border-line bg-sand/60 py-16 sm:py-24">
+    <div class="container-page">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Two locations</p>
+        <h2 class="mt-2 text-4xl text-navy-dark sm:text-5xl">Visit us</h2>
+      </div>
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        {offices.map((o) => <OfficeCard office={o} />)}
+      </div>
+    </div>
+  </section>
+
+  <section id="appointment" class="py-16 sm:py-24">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+      <div>
+        <p class="eyebrow">Get in touch</p>
+        <h2 class="mt-2 text-4xl text-navy-dark sm:text-5xl">Schedule your appointment</h2>
+        <p class="mt-4 text-lg leading-relaxed text-ink-muted">
+          Send a request and our team will contact you to find a time, or call the office nearest you.
+        </p>
+        <ul class="mt-8 space-y-4">
+          {
+            offices.map((o) => (
+              <li class="flex items-center gap-4">
+                <span class="flex size-11 items-center justify-center rounded-xl bg-navy text-white">
+                  <Icon name="phone" class="size-5" />
+                </span>
+                <span>
+                  <span class="block text-sm text-ink-muted">{o.city}</span>
+                  <a href={tel(o.phone)} class="text-lg font-semibold tabular-nums hover:text-navy">
+                    {o.phone}
+                  </a>
+                </span>
+              </li>
+            ))
+          }
+          <li class="flex items-center gap-4">
+            <span class="flex size-11 items-center justify-center rounded-xl bg-navy text-white">
+              <Icon name="mail" class="size-5" />
+            </span>
+            <span>
+              <span class="block text-sm text-ink-muted">Email</span>
+              <a href={`mailto:${site.email}`} class="font-semibold hover:text-navy">{site.email}</a>
+            </span>
+          </li>
+        </ul>
+      </div>
+      <AppointmentForm />
+    </div>
+  </section>
+</BaseLayout>

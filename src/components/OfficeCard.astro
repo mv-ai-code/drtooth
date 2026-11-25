@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import Hours from './Hours.astro';
+import { tel, type Office } from '../data/site';
+
+interface Props {
+  office: Office;
+  /** Show the link to the office's own page. */
+  showPageLink?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { office: o, showPageLink = true, headingLevel: H = 'h3' } = Astro.props;
+---
+
+<article class="card flex flex-col p-6 sm:p-8">
+  <p class="eyebrow">{o.building}</p>
+  <H class="mt-1 text-3xl text-navy-dark">{o.city}</H>
+
+  <dl class="mt-6 space-y-5 text-[0.975rem]">
+    <div class="flex gap-3">
+      <dt><Icon name="pin" class="mt-0.5 size-5 text-navy" /><span class="sr-only">Address</span></dt>
+      <dd>
+        <address class="not-italic">
+          {o.street}<br />{`${o.locality}, ${o.region} ${o.postalCode}`}
+        </address>
+        <a href={o.mapsUrl} class="mt-1 inline-flex items-center gap-1 font-semibold text-navy hover:underline" rel="noopener">
+          Get directions <Icon name="external" class="size-3.5" />
+        </a>
+      </dd>
+    </div>
+    <div class="flex gap-3">
+      <dt><Icon name="phone" class="mt-0.5 size-5 text-navy" /><span class="sr-only">Phone</span></dt>
+      <dd>
+        <a href={tel(o.phone)} class="text-lg font-semibold tabular-nums hover:text-navy">{o.phone}</a>
+      </dd>
+    </div>
+    <div class="flex gap-3">
+      <dt><Icon name="clock" class="mt-0.5 size-5 text-navy" /><span class="sr-only">Hours</span></dt>
+      <dd class="flex-1"><Hours hours={o.hours} phone={o.phone} /></dd>
+    </div>
+  </dl>
+
+  {
+    showPageLink && (
+      <a href={o.path} class="mt-8 inline-flex items-center gap-2 self-start font-semibold text-navy hover:underline">
+        About our {o.city} office <Icon name="arrow" class="size-4" />
+      </a>
+    )
+  }
+</article>

@@ -1,0 +1,81 @@
+---
+/** One page per office: /bellevue/ and /mountlake-terrace/. */
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OfficeCard from '../components/OfficeCard.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import AppointmentForm from '../components/AppointmentForm.astro';
+import Icon from '../components/Icon.astro';
+import { site, offices, tel, type Office } from '../data/site';
+import { officeSchema } from '../lib/schema';
+
+export const getStaticPaths = (() =>
+  offices.map((office) => ({ params: { office: office.id }, props: { office } }))) satisfies GetStaticPaths;
+
+const { office } = Astro.props as { office: Office };
+const other = offices.find((o) => o.id !== office.id);
+const title = `Dentist in ${office.city}, WA`;
+const description = `${site.name} in ${office.city}, WA: family, implant and cosmetic dentistry with ${site.dentist}. ${office.street}. Call ${office.phone}.`;
+---
+
+<BaseLayout title={title} description={description} schema={[officeSchema(office)]}>
+  <section class="py-12 sm:py-16">
+    <div class="container-page grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-16">
+      <div>
+        <nav aria-label="Breadcrumb" class="text-sm text-ink-muted">
+          <a href="/" class="hover:underline">Home</a>
+          <span aria-hidden="true" class="mx-1.5">/</span>
+          <span aria-current="page">{office.city}</span>
+        </nav>
+        <p class="eyebrow mt-6">{site.name}</p>
+        <h1 class="mt-2 text-5xl leading-[1.05] text-navy-dark sm:text-6xl">
+          Your dentist in <span class="text-orange-strong">{office.city}</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
+          {site.dentist} and our team provide family, implant and cosmetic dentistry at {office.building} in {office.city}, WA.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={tel(office.phone)} class="btn btn-primary">
+            <Icon name="phone" class="size-4" />
+            Call {office.phone}
+          </a>
+          <a href="#appointment" class="btn btn-secondary">Request appointment</a>
+        </div>
+      </div>
+      <OfficeCard office={office} showPageLink={false} headingLevel="h2" />
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-sand/60 py-16 sm:py-20">
+    <div class="container-page">
+      <h2 class="text-4xl text-navy-dark sm:text-5xl">Services</h2>
+      <div class="mt-8">
+        <ServicesGrid />
+      </div>
+    </div>
+  </section>
+
+  <section id="appointment" class="py-16 sm:py-20">
+    <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+      <div>
+        <h2 class="text-4xl text-navy-dark sm:text-5xl">Book a visit in {office.city}</h2>
+        <p class="mt-4 text-lg leading-relaxed text-ink-muted">
+          Send a request and we'll contact you to find a time, or call us at
+          <a href={tel(office.phone)} class="font-semibold text-navy hover:underline">{office.phone}</a>.
+        </p>
+        {
+          other && (
+            <p class="mt-6 text-ink-muted">
+              Closer to {other.city}?{' '}
+              <a href={other.path} class="font-semibold text-navy hover:underline">
+                See our {other.city} office
+              </a>
+              .
+            </p>
+          )
+        }
+      </div>
+      <AppointmentForm office={office.id} />
+    </div>
+  </section>
+</BaseLayout>

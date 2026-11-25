@@ -1,0 +1,55 @@
+---
+import { site, offices, tel } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-auto bg-navy-dark text-white/85">
+  <div class="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="lg:col-span-1">
+      <p class="font-serif text-2xl font-semibold text-white">{site.shortName}</p>
+      <p class="mt-1 text-sm">Family and Implant Dentistry</p>
+      <p class="mt-4 text-sm leading-relaxed">{site.dentist}. {site.tagline}</p>
+    </div>
+
+    {
+      offices.map((o) => (
+        <div>
+          <h2 class="font-sans text-sm font-semibold tracking-wider text-white uppercase">{o.city}</h2>
+          <address class="mt-3 space-y-1 text-sm not-italic">
+            <p>{o.building}</p>
+            <p>{o.street}</p>
+            <p>
+              {o.locality}, {o.region} {o.postalCode}
+            </p>
+            <p class="pt-2">
+              <a href={tel(o.phone)} class="font-semibold text-white hover:underline">
+                {o.phone}
+              </a>
+            </p>
+            <p>
+              <a href={o.mapsUrl} class="underline-offset-2 hover:underline" rel="noopener">
+                Directions
+              </a>
+              {' · '}
+              <a href={o.path} class="underline-offset-2 hover:underline">
+                Office details
+              </a>
+            </p>
+          </address>
+        </div>
+      ))
+    }
+
+    <div>
+      <h2 class="font-sans text-sm font-semibold tracking-wider text-white uppercase">Contact</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a href={`mailto:${site.email}`} class="hover:underline">{site.email}</a></li>
+        <li><a href="/#appointment" class="hover:underline">Request an appointment</a></li>
+        <li><a href="/privacy/" class="hover:underline">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/15">
+    <p class="container-page py-6 text-xs text-white/65">© {year} {site.name}. All rights reserved.</p>
+  </div>
+</footer>

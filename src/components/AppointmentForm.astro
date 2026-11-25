@@ -1,0 +1,247 @@
+---
+/**
+ * Appointment request form (option A + B).
+ *
+ * - Collects contact details and scheduling preferences only. There is deliberately no free-text
+ *   field, so patients aren't invited to type health information.
+ * - Sends to a Google Apps Script web app owned by the practice's Google Workspace (BAA accepted).
+ *   See apps-script/README.md.
+ * - Sends as a plain-text POST (no CORS preflight) and reads the JSON reply, so a failure shows an
+ *   error with the phone numbers instead of a false "sent" message.
+ * - Spam protection: hidden honeypot field + time-to-submit check here, plus rate limiting in the script.
+ */
+import Icon from './Icon.astro';
+import { site, offices, tel } from '../data/site';
+
+interface Props {
+  /** Pre-select an office (office pages). */
+  office?: (typeof offices)[number]['id'];
+}
+const { office } = Astro.props;
+
+const endpoint = site.formEndpoint;
+// Without an endpoint the form can't send anything, so production shows call-to-book instead.
+// In `astro dev` the form still renders so it can be worked on.
+const showForm = Boolean(endpoint) || import.meta.env.DEV;
+const privacyHref = '/privacy/';
+---
+
+<div class="card p-6 sm:p-8" data-appt>
+  {
+    showForm ? (
+      <>
+        <form data-appt-form data-endpoint={endpoint} novalidate>
+          <h3 class="text-3xl text-navy-dark">Request an appointment</h3>
+          <p class="mt-2 text-ink-muted">We'll call or email you to confirm a time.</p>
+
+          {!endpoint && (
+            <p class="mt-4 rounded-lg bg-orange-soft p-3 text-sm">
+              <strong>Dev only:</strong> <code>site.formEndpoint</code> is empty, so this form can't send.
+              Production shows a call-to-book card instead.
+            </p>
+          )}
+
+          <div class="mt-6 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="label" for="appt-first">First name</label>
+              <input class="field" id="appt-first" name="firstName" autocomplete="given-name" required maxlength="60" />
+            </div>
+            <div>
+              <label class="label" for="appt-last">Last name</label>
+              <input class="field" id="appt-last" name="lastName" autocomplete="family-name" required maxlength="60" />
+            </div>
+            <div>
+              <label class="label" for="appt-phone">Phone</label>
+              <input
+                class="field"
+                id="appt-phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                required
+                maxlength="25"
+                pattern="[0-9()+.\- ]{7,25}"
+                inputmode="tel"
+              />
+            </div>
+            <div>
+              <label class="label" for="appt-email">
+                Email <span class="font-normal text-ink-muted">(optional)</span>
+              </label>
+              <input class="field" id="appt-email" name="email" type="email" autocomplete="email" maxlength="120" />
+            </div>
+          </div>
+
+          <fieldset class="mt-5">
+            <legend class="label">Preferred office</legend>
+            <div class="grid gap-3 sm:grid-cols-2">
+              {offices.map((o) => (
+                <label class="flex cursor-pointer items-center gap-3 rounded-xl border-[1.5px] border-line bg-cream px-4 py-3 has-[:checked]:border-navy has-[:checked]:bg-navy-soft">
+                  <input
+                    type="radio"
+                    name="office"
+                    value={o.id}
+                    required
+                    checked={office ? office === o.id : undefined}
+                    class="size-4 accent-[var(--color-navy)]"
+                  />
+                  <span class="font-medium">{o.city}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <div class="mt-5 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label class="label" for="appt-patient">Are you a new patient?</label>
+              <select class="field" id="appt-patient" name="patientType">
+                <option value="">Select</option>
+                <option value="new">Yes, I'm new</option>
+                <option value="returning">No, I've been here before</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="appt-time">Preferred time</label>
+              <select class="field" id="appt-time" name="preferredTime">
+                <option value="any">Any time</option>
+                <option value="morning">Morning</option>
+                <option value="midday">Midday</option>
+                <option value="afternoon">Afternoon</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Honeypot: hidden from people and screen readers; bots tend to fill it. */}
+          <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+            <label for="appt-company">Company</label>
+            <input id="appt-company" name="company" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <p class="mt-6 flex gap-2 rounded-xl bg-navy-soft p-4 text-sm">
+            <Icon name="alert" class="mt-0.5 size-4 shrink-0 text-navy" />
+            <span>
+              Please don't include medical details here. We'll discuss them by phone or at your visit.
+            </span>
+          </p>
+
+          <button type="submit" class="btn btn-primary mt-6 w-full sm:w-auto" data-appt-submit>
+            <Icon name="calendar" class="size-4" />
+            <span data-appt-label>Send request</span>
+          </button>
+
+          <p class="mt-4 text-xs leading-relaxed text-ink-muted">
+            By sending this form you agree that we may contact you by phone or email about your appointment.
+            See our <a href={privacyHref} class="underline">privacy notice</a>.
+          </p>
+
+          <div role="alert" class="mt-4 hidden rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900" data-appt-error>
+            <p class="font-semibold">We couldn't send your request.</p>
+            <p class="mt-1">
+              Please try again, or call us:
+              {offices.map((o, i) => (
+                <>
+                  {i > 0 && ' or '}
+                  {o.city} <a href={tel(o.phone)} class="font-semibold underline">{o.phone}</a>
+                </>
+              ))}
+              .
+            </p>
+          </div>
+        </form>
+
+        <div class="hidden py-8 text-center" data-appt-success tabindex="-1">
+          <div class="mx-auto flex size-16 items-center justify-center rounded-full bg-navy-soft text-navy">
+            <Icon name="check" class="size-8" />
+          </div>
+          <h3 class="mt-5 text-3xl text-navy-dark">Thank you!</h3>
+          <p class="mx-auto mt-2 max-w-sm text-ink-muted">
+            We've received your request and will contact you soon to confirm your appointment.
+          </p>
+          <button type="button" class="btn btn-secondary mt-6" data-appt-again>
+            Send another request
+          </button>
+        </div>
+      </>
+    ) : (
+      <div>
+        <h3 class="text-3xl text-navy-dark">Book by phone</h3>
+        <p class="mt-2 text-ink-muted">Call the office that's most convenient for you and we'll find a time.</p>
+        <ul class="mt-6 space-y-3">
+          {offices.map((o) => (
+            <li>
+              <a href={tel(o.phone)} class="btn btn-primary w-full justify-between">
+                <span>{o.city}</span>
+                <span class="tabular-nums">{o.phone}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+</div>
+
+<script>
+  const MIN_FILL_MS = 3000;
+  const TIMEOUT_MS = 20000;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-appt]')) {
+    const form = root.querySelector<HTMLFormElement>('[data-appt-form]');
+    if (!form) continue;
+    const success = root.querySelector<HTMLElement>('[data-appt-success]')!;
+    const error = root.querySelector<HTMLElement>('[data-appt-error]')!;
+    const submit = root.querySelector<HTMLButtonElement>('[data-appt-submit]')!;
+    const label = root.querySelector<HTMLElement>('[data-appt-label]')!;
+    const again = root.querySelector<HTMLButtonElement>('[data-appt-again]')!;
+    const endpoint = form.dataset.endpoint ?? '';
+    let startedAt = Date.now();
+
+    const setBusy = (busy: boolean) => {
+      submit.disabled = busy;
+      submit.classList.toggle('opacity-70', busy);
+      label.textContent = busy ? 'Sending…' : 'Send request';
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      error.classList.add('hidden');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      const payload = { ...data, elapsedMs: Date.now() - startedAt, page: location.pathname };
+
+      setBusy(true);
+      try {
+        if (!endpoint) throw new Error('No form endpoint configured');
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+        // A string body is sent as text/plain: a "simple" request, so no CORS preflight
+        // (Apps Script can't answer one). The reply is readable JSON.
+        const res = await fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), signal: ctrl.signal });
+        clearTimeout(timer);
+        const json = await res.json().catch(() => null);
+        if (!res.ok || !json || json.ok !== true) throw new Error(json?.error ?? `HTTP ${res.status}`);
+
+        form.classList.add('hidden');
+        success.classList.remove('hidden');
+        success.focus();
+      } catch (err) {
+        console.error('Appointment request failed:', err);
+        error.classList.remove('hidden');
+      } finally {
+        setBusy(false);
+      }
+    });
+
+    again.addEventListener('click', () => {
+      form.reset();
+      startedAt = Date.now() - MIN_FILL_MS; // they've already shown they're human
+      success.classList.add('hidden');
+      form.classList.remove('hidden');
+      form.querySelector<HTMLInputElement>('input:not([tabindex="-1"])')?.focus();
+    });
+  }
+</script>

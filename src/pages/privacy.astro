@@ -1,0 +1,66 @@
+---
+/**
+ * Website privacy page. VERIFY: have the practice (and its HIPAA privacy officer) review this text
+ * before launch, and supply the Notice of Privacy Practices (site.noticeOfPrivacyPracticesUrl).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site, offices, tel } from '../data/site';
+
+const npp = site.noticeOfPrivacyPracticesUrl;
+---
+
+<BaseLayout title="Privacy" description={`How ${site.name} handles information you share through this website.`}>
+  <article class="container-page max-w-3xl py-12 sm:py-16">
+    <h1 class="text-5xl text-navy-dark">Privacy</h1>
+
+    <div class="mt-8 space-y-6 text-lg leading-relaxed text-ink-muted [&_h2]:mt-10 [&_h2]:text-3xl [&_h2]:text-navy-dark">
+      <h2>Notice of Privacy Practices</h2>
+      {
+        npp ? (
+          <p>
+            Our <a href={npp} class="font-semibold text-navy underline">Notice of Privacy Practices</a> describes how
+            medical information about you may be used and disclosed and how you can get access to this information.
+          </p>
+        ) : (
+          <p>
+            Our Notice of Privacy Practices describes how medical information about you may be used and disclosed and how
+            you can get access to this information. A copy is available at either office, or call us and we'll send you one.
+          </p>
+        )
+      }
+
+      <h2>The appointment request form</h2>
+      <p>
+        The form asks only for your name, phone number, optional email, preferred office and scheduling preferences. We use
+        this information to contact you about your appointment. Please don't include medical details in the form; we'll
+        discuss them by phone or at your visit.
+      </p>
+      <p>
+        Requests are delivered to our practice's own systems and are seen only by our staff. We don't sell this information
+        or use it for advertising.
+      </p>
+
+      <h2>Cookies and tracking</h2>
+      <p>
+        This website doesn't use advertising or analytics tracking, and it doesn't set cookies. Links to maps open Google
+        Maps, which has its own privacy policy.
+      </p>
+
+      <h2>Questions</h2>
+      <p>
+        Contact us at <a href={`mailto:${site.email}`} class="font-semibold text-navy underline">{site.email}</a> or call
+        {
+          offices.map((o, i) => (
+            <>
+              {i > 0 && ' or '}
+              our {o.city} office at{' '}
+              <a href={tel(o.phone)} class="font-semibold text-navy underline">
+                {o.phone}
+              </a>
+            </>
+          ))
+        }.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
