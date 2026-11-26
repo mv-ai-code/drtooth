@@ -87,6 +87,26 @@ export const services: Service[] = [
     description: 'Rebuild bone to prepare your jaw for successful implant placement.',
     icon: 'bonegraft',
     group: 'implants',
+    video: {
+      title: 'Bone grafting before an implant',
+      description:
+        'A 49-second narrated animation showing how a bone graft rebuilds the jaw after tooth loss so it can support a dental implant.',
+      src720: '/videos/bone-graft-720p.mp4',
+      src1080: '/videos/bone-graft-1080p.mp4',
+      poster: '/videos/bone-graft-poster.jpg',
+      duration: 'PT49S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'Bone grafting before an implant.',
+        'Step one: bone loss. After a tooth is lost, the jawbone in that spot slowly shrinks, and may become too thin to hold an implant.',
+        'Step two: the bone graft. Bone graft material is placed where bone is missing, rebuilding the shape of the jaw.',
+        'Step three: protection. A thin membrane covers the graft, and the gum is closed over it to protect it while it heals.',
+        'Step four: healing. Over the next few months, your body gradually replaces the graft with your own new bone.',
+        'Step five: ready for an implant. The jaw now has enough healthy bone to support a dental implant.',
+        'Wondering if you need a bone graft? Book a consultation with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Prosthodontics',
