@@ -277,6 +277,25 @@ export const services: Service[] = [
     description: 'Cone beam 3D scans for precise diagnosis and implant planning.', // VERIFY: which offices
     icon: 'cbct',
     group: 'technology',
+    video: {
+      title: '3D imaging (CBCT)',
+      description:
+        'A 45-second narrated animation explaining how a CBCT 3D scan works and how it helps plan implants and treatment.',
+      src720: '/videos/cbct-720p.mp4',
+      src1080: '/videos/cbct-1080p.mp4',
+      poster: '/videos/cbct-poster.jpg',
+      duration: 'PT45S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        "Here's how 3D imaging helps us plan your care.",
+        'Step one: the scan. A CBCT scanner takes a 3D image of your teeth and jaw, in just a few seconds.',
+        'Step two: quick and comfortable. You stay still while the scanner circles around you. Nothing touches your teeth.',
+        'Step three: a complete 3D view. We can see bone, nerves and roots from every angle, not just a flat picture.',
+        'Step four: precise planning. This helps us plan implants and treatment, safely and accurately.',
+        '3D imaging is available at both our Bellevue and Mountlake Terrace offices. Book a visit with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Botox',
