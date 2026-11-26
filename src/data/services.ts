@@ -43,6 +43,25 @@ export const services: Service[] = [
     description: 'Restore decayed teeth with natural-looking, tooth-colored fillings.', // VERIFY: old site also mentioned amalgam
     icon: 'filling',
     group: 'general',
+    video: {
+      title: 'How tooth-colored fillings work',
+      description:
+        'A 39-second narrated animation showing how a cavity is treated with a tooth-colored filling, from removing the decay to shaping and polishing.',
+      src720: '/videos/filling-720p.mp4',
+      src1080: '/videos/filling-1080p.mp4',
+      poster: '/videos/filling-poster.jpg',
+      duration: 'PT39S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'How tooth-colored fillings work.',
+        'Step one: a cavity. Decay creates a hole in the tooth, that grows deeper if it is left untreated.',
+        'Step two: removing the decay. The decayed part of the tooth is gently removed, leaving a clean, healthy surface.',
+        'Step three: the filling. Tooth-colored material is placed in layers, and hardened with a special light.',
+        'Step four: finished. The filling is shaped and polished to match your bite, and your natural tooth.',
+        'Have a cavity, or a filling that needs replacing? Book a visit with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Root Canal Treatment',
