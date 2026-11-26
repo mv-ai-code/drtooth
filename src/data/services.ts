@@ -109,10 +109,56 @@ export const services: Service[] = [
     },
   },
   {
-    title: 'Prosthodontics',
-    description: 'Custom dentures, bridges and full-mouth restorations.',
-    icon: 'prosthodontics',
+    title: 'Dental Bridges',
+    description: 'Fixed bridges that fill the gap from one or more missing teeth, supported by natural teeth or implants.',
+    icon: 'bridge',
     group: 'restorative',
+    video: {
+      title: 'How dental bridges work',
+      description:
+        'A 46-second narrated animation showing how a dental bridge replaces a missing tooth, and how an implant bridge replaces several teeth in a row.',
+      src720: '/videos/bridge-720p.mp4',
+      src1080: '/videos/bridge-1080p.mp4',
+      poster: '/videos/bridge-poster.jpg',
+      duration: 'PT46S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'How dental bridges work.',
+        'Step one: a missing tooth. A gap makes chewing harder, and can let nearby teeth drift.',
+        'Step two: preparing the anchors. The teeth on each side are gently shaped to hold crowns.',
+        'Step three: the bridge. A replacement tooth, joined to two crowns, is bonded in place as one piece.',
+        'Step four: several missing teeth. When a few teeth in a row are missing, there is another option.',
+        "Step five: an implant bridge. Two implants support the bridge, so neighboring teeth don't need to be reshaped.",
+        'Wondering if a bridge is right for you? Book a consultation with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
+  },
+  {
+    title: 'Dentures',
+    description: 'Custom full, partial and implant-supported dentures, plus full-mouth restorations.',
+    icon: 'dentures',
+    group: 'restorative',
+    video: {
+      title: 'Dentures: your options',
+      description:
+        'A 48-second narrated animation comparing partial dentures, full dentures and implant-supported dentures.',
+      src720: '/videos/dentures-720p.mp4',
+      src1080: '/videos/dentures-1080p.mp4',
+      poster: '/videos/dentures-poster.jpg',
+      duration: 'PT48S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'Dentures: your options.',
+        'Step one: several missing teeth. A denture can replace them, and restore your smile.',
+        'Step two: a partial denture. Replacement teeth on a gum-colored base fill the gaps, held by small clasps. It comes out for cleaning.',
+        'Step three: no teeth left. When all the teeth in an arch are missing, a full denture can replace them.',
+        'Step four: a full denture. A complete set of teeth rests on the gums, custom-made for a close, comfortable fit.',
+        "Step five: an implant-supported denture. A few implants hold the denture firmly, so it won't slip when you eat or speak.",
+        'Wondering which denture is right for you? Book a consultation with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Crowns',
