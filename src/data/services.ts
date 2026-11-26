@@ -119,6 +119,26 @@ export const services: Service[] = [
     description: 'Durable, custom-made crowns to protect and restore damaged teeth.',
     icon: 'crown',
     group: 'restorative',
+    video: {
+      title: 'How dental crowns work',
+      description:
+        'A 48-second narrated animation showing how a dental crown restores a damaged tooth, from preparation and impression to the temporary and final crown.',
+      src720: '/videos/crown-720p.mp4',
+      src1080: '/videos/crown-1080p.mp4',
+      poster: '/videos/crown-poster.jpg',
+      duration: 'PT48S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'How dental crowns work.',
+        'Step one: a damaged tooth. A tooth that is cracked, heavily filled or weakened needs protection to keep it working.',
+        'Step two: preparing the tooth. The tooth is gently shaped so a crown can fit over it.',
+        'Step three: the impression. A precise digital scan or impression is taken, so your crown is made to fit exactly.',
+        'Step four: the temporary crown. A temporary crown protects the tooth while your custom crown is made.',
+        'Step five: the final crown. Your custom crown is bonded in place, shaped and shaded to match your natural teeth.',
+        'Wondering if a crown is right for you? Book a consultation with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Same-Day Crowns (CEREC)',
