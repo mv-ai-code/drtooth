@@ -94,6 +94,27 @@ export const services: Service[] = [
     description: 'Gentle tooth removal when it is the right option, with careful aftercare.',
     icon: 'extraction',
     group: 'general',
+    video: {
+      title: 'Tooth extraction: what to expect',
+      description:
+        'A 54-second narrated animation explaining what happens during a tooth extraction, from numbing and removal to socket preservation, healing and replacement options.',
+      src720: '/videos/extraction-720p.mp4',
+      src1080: '/videos/extraction-1080p.mp4',
+      poster: '/videos/extraction-poster.jpg',
+      duration: 'PT54S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        "Here's what happens during a tooth extraction.",
+        "Step one: when a tooth can't be saved. Severe damage, infection or crowding can mean removal is the best option.",
+        'Step two: numbing. The area is fully numbed, so you feel pressure, but no pain.',
+        'Step three: gentle removal. The tooth is carefully loosened, and lifted out.',
+        'Step four, if needed: socket preservation. A bone graft placed in the socket helps keep the bone ready for a future implant.',
+        'Step five: healing. The area heals over the following weeks, with simple aftercare at home.',
+        'Step six: next steps. The gap can later be replaced with an implant or a bridge. Ask us about your options.',
+        'Need a tooth removed? Book a visit with Doctor Tooth, Family and Implant Dentistry.',
+      ],
+    },
   },
   {
     title: 'Dental Implants',
