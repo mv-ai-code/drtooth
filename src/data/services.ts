@@ -68,6 +68,26 @@ export const services: Service[] = [
     description: 'Root canal therapy to save infected teeth and relieve discomfort.',
     icon: 'rootcanal',
     group: 'general',
+    video: {
+      title: 'How root canal treatment works',
+      description:
+        'A 45-second narrated animation showing how root canal treatment saves an infected tooth, from cleaning and sealing the canals to restoring the tooth.',
+      src720: '/videos/root-canal-720p.mp4',
+      src1080: '/videos/root-canal-1080p.mp4',
+      poster: '/videos/root-canal-poster.jpg',
+      duration: 'PT45S',
+      uploadDate: '2026-11-25',
+      // Matches the narration.
+      transcript: [
+        'How root canal treatment works.',
+        'Step one: an infected tooth. When decay or injury reaches the nerve inside the tooth, it can cause pain and infection.',
+        'Step two: the opening. A small opening is made in the top of the tooth, to reach the inside.',
+        'Step three: cleaning. The infected tissue is removed, and the canals are cleaned and shaped.',
+        'Step four: sealing. The canals are filled and sealed, to keep bacteria out.',
+        'Step five: restoring the tooth. A filling or crown protects the tooth, so you can keep using it normally.',
+        "Tooth pain that won't go away? Book a visit with Doctor Tooth, Family and Implant Dentistry.",
+      ],
+    },
   },
   {
     title: 'Tooth Extraction',
